@@ -53,11 +53,6 @@ body {
  padding: 10px 20px;
  }
 
-#next-btn {
- background-color: rgb(255, 253, 127);
- font-weight: bolder;
- padding: 10px 20px;
-}
 
 .hide {
   display: none;
