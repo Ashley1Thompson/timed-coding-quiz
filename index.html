@@ -2,11 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Code Quiz!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="./assets/style.css" rel="stylesheet">
 
   </head>
   <body>
+   
+      <a href="./highscores.html"><h5 class= "float-start"> Highscores</h5></a>
+        
+        <h5 class= "float-end" id="countdown"> Time Left! 00:00</h5>
+
     <div class="container">
       <div id="question-container" class="hide">
         <div id="question">Quiz Question</div>
@@ -19,7 +26,13 @@
       </div>
       <div class="control-panel">
           <button id="start-btn" class="start-btn btn">Start Quiz</button>
-        
+          <button id="next-btn" class="next-btn hide">Next question!</button>
+      </div>
+      <div id="gameOver" class="hide">
+        <div>Game Over!</div>
+        <div id='score'></div>
+        <input id="name" placeholder="Player Name"></input>
+        <button class="submit" id="submit-btn">Save Your Score!</button>
       </div>
     </div>
     <script src="./assets/script.js"></script>

@@ -1,43 +1,107 @@
-// When the start button is clicked the game starts
- var startButton = document.getElementById('start-btn')
- var questionContainerEl = document.getElementById('question-container')
- var shuffleQuestions, currentQuestion
- var questionEl = document.getElementById('question')
- var answerBtnEl = document.getElementById('answer-option')
+var startButton = document.getElementById('start-btn')
+var nextButton = document.getElementById('next-btn')
+var submitButton = document.getElementById('submit-btn')
+var questionContainerEl = document.getElementById('question-container')
+var shuffleQuestions, currentQuestion
+var questionEl = document.getElementById('question')
+var answerBtnEl = document.getElementById('answer-option')
+var timerEl = document.getElementById('countdown');
+var timeCount = 90
+var timeInterval 
+var gameOver = document.getElementById('gameOver')
+var score
+var scoreEl = document.getElementById('score')
 
- startButton.addEventListener('click', startQuiz)
+startButton.addEventListener('click', startQuiz)
 
- function startQuiz() {
-   console.log('Start')
-   startButton.classList.add('hide')
-   questionContainerEl.classList.remove('hide')
-   shuffleQuestions = questions.sort(() => Math.random() - .5)
-   currentQuestion = 0
-   finalCountdown()
-   setNextQuestion()
+nextButton.addEventListener('click', () =>{
+  currentQuestion++
+  setNextQuestion()
+})
 
-
- }
-// When the start button is clicked a timer begins to countdown
-function finalCountdown() {
-
-}
-
-// when a questioned is answered correctly, I am presented with another question
-// When a question is answered incorrectly, time is subtracted from the countdown
-function selectAnswer(e) {
-  var selectedAnswer = e.target
-  var correct = selectedAnswer.dataset.correct
-}
+submitButton.addEventListener('click', submit)
 
 function setNextQuestion() {
   resetState()
   showQuestion(shuffleQuestions[currentQuestion])
 }
 
+function startQuiz() {
+  timerCountdown(false)
+  startButton.classList.add('hide')
+  questionContainerEl.classList.remove('hide')
+  shuffleQuestions = questions.sort(() => Math.random() - .5)
+  currentQuestion = 0
+  setNextQuestion()
+}
+// When the start button is clicked a timer begins to countdown
+
+function timerCountdown(stop) {
+  // stop && clearInterval(timeInterval)
+  
+  var timeInterval = setInterval(function() {
+      if (timeCount > 0) {
+          timerEl.textContent = 'Timer: ' + timeCount;
+          timeCount --;
+      } else {
+        // Game over function
+        timerEl.textContent = 'Times up!';
+        clearInterval(timeInterval);
+        showGameOver()
+      }
+  }, 1000);
+}
+
+function stopQuiz () {
+  score = timeCount
+  clearInterval(timeInterval)
+  showGameOver()
+  timerEl.style.visibility = 'hidden'
+  scoreEl.innerText = `Your Score is ${score}`
+}
+
+function showGameOver () {
+  questionContainerEl.style.display = 'none'
+  gameOver.classList.remove('hide')
+  gameOver.style.display = 'inline'
+}
+
+// when a question is answered correctly, I am presented with the Next button
+// When a question is answered incorrectly, time is subtracted from the countdown
+function selectAnswer(e) {
+  var selectedAnswer = e.target
+  var correct = selectedAnswer.dataset.correct
+  setStatus(document.body, correct)
+  Array.from(answerBtnEl.children).forEach(button => {
+    setStatus(button, button.dataset.correct)
+  })
+  !correct && (timeCount = timeCount - 10)
+  if (shuffleQuestions.length > currentQuestion + 1){
+    nextButton.classList.remove('hide')
+  } else if (shuffleQuestions.length = currentQuestion + 1) {
+    stopQuiz()
+  }
+}
+
+function setStatus(element, correct) {
+  clearStatus(element)
+  if (correct) {
+    element.classList.add('correct')
+  } else {
+    element.classList.add('wrong')
+  }
+}
+
+function clearStatus (element){
+  element.classList.remove('correct')
+  element.classList.remove('wrong')
+}
+
+// display the question text
+// assigning a button to each answer option
 function showQuestion(question) {
   questionEl.innerText = question.question
-  question.answers.forEach(answer => {
+  question.answer.forEach(answer => {
     var button = document.createElement('button')
     button.innerText = answer.text
     button.classList.add('btn')
@@ -50,29 +114,65 @@ function showQuestion(question) {
 }
 
 function resetState () {
+  clearStatus(document.body)
+  nextButton.classList.add('hide')
   while (answerBtnEl.firstChild) {
     answerBtnEl.removeChild
     (answerBtnEl.firstChild)
   }
 }
 
-// When a question is answered, the result is printed to the bottom of the quiz
-function printResult() {
-
+function submit () {
+  var name = document.getElementById('name').value
+  localStorage.setItem(score, name)
+  submitButton.disabled = true
 }
-
-// When the game is finished, a user can view their highscore and input their initials
-
-// The highscore data is stored locally
 
 var questions = [
   {
     question: 'Commonly used datatypes do NOT include:',
-    answers: [
+    answer: [
       {text: 'booleans', correct: false},
       {text: 'alerts', correct: true},
       {text: 'strings', correct: false},
       {text: 'numbers', correct: false},
     ]
+  },
+  {
+    question: 'The condition of an if/else statement is enclosed with ___.',
+    answer: [
+      {text: 'quotes', correct: false},
+      {text: 'curly brackets', correct: false},
+      {text: 'parenthesis', correct: true},
+      {text: 'square brackets', correct: false},
+    ]
+  },
+  {
+    question: 'Arrays in Javascript can be used to store ___.',
+    answer: [
+      {text: 'numbers and strings', correct: false},
+      {text: 'other arrays', correct: false},
+      {text: 'booleans', correct: false},
+      {text: 'all of the above', correct: true},
+    ]
+  },
+  {
+    question: 'String values must be enclosed within ___ when being assigned to variables.',
+    answer: [
+      {text: 'quotes', correct: true},
+      {text: 'commas', correct: false},
+      {text: 'parenthesis', correct: false},
+      {text: 'curly brackets', correct: false},
+    ]
+  },
+  {
+    question: 'What does API stand for?',
+    answer: [
+      {text: 'abstract parameter integer', correct: false},
+      {text: 'absolute programming internet', correct: false},
+      {text: 'application programming interface', correct: true},
+      {text: 'anti-plagarism inspector', correct: false},
+    ]
   }
 ]
+
