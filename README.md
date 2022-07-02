@@ -15,6 +15,9 @@ THEN the game is over
 WHEN the game is over  
 THEN I can save my initials and score  
 
+## Link to deployed App
+https://ashley1thompson.github.io/timed-coding-quiz/
+
 ## How to Play
 Click the Start Quuiz button.  
 Answer the Quiz question.  
