@@ -1,3 +1,4 @@
+// variables 
 var startButton = document.getElementById('start-btn')
 var nextButton = document.getElementById('next-btn')
 var submitButton = document.getElementById('submit-btn')
@@ -12,6 +13,7 @@ var gameOver = document.getElementById('gameOver')
 var score
 var scoreEl = document.getElementById('score')
 
+// buttons and events
 startButton.addEventListener('click', startQuiz)
 
 nextButton.addEventListener('click', () =>{
@@ -21,11 +23,14 @@ nextButton.addEventListener('click', () =>{
 
 submitButton.addEventListener('click', submit)
 
+// show a random question from the array
 function setNextQuestion() {
   resetState()
   showQuestion(shuffleQuestions[currentQuestion])
 }
 
+// start timer, hide start button, show question container 
+// shuffle random question from array
 function startQuiz() {
   timerCountdown(false)
   startButton.classList.add('hide')
@@ -34,11 +39,10 @@ function startQuiz() {
   currentQuestion = 0
   setNextQuestion()
 }
-// When the start button is clicked a timer begins to countdown
 
+// timer begins at timeCount and countsdown one second at a time
+// when timer stops display game over screen
 function timerCountdown(stop) {
-  // stop && clearInterval(timeInterval)
-  
   var timeInterval = setInterval(function() {
       if (timeCount > 0) {
           timerEl.textContent = 'Timer: ' + timeCount;
@@ -52,6 +56,7 @@ function timerCountdown(stop) {
   }, 1000);
 }
 
+// display score (how many seconds left on timer)
 function stopQuiz () {
   score = timeCount
   clearInterval(timeInterval)
@@ -60,14 +65,14 @@ function stopQuiz () {
   scoreEl.innerText = `Your Score is ${score}`
 }
 
+// hide question container, show game over
 function showGameOver () {
   questionContainerEl.style.display = 'none'
   gameOver.classList.remove('hide')
   gameOver.style.display = 'inline'
 }
 
-// when a question is answered correctly, I am presented with the Next button
-// When a question is answered incorrectly, time is subtracted from the countdown
+// when a question is answered present next button
 function selectAnswer(e) {
   var selectedAnswer = e.target
   var correct = selectedAnswer.dataset.correct
@@ -83,6 +88,8 @@ function selectAnswer(e) {
   }
 }
 
+// When a question is answered correctly background green
+// when a question is answered incorrectly background red
 function setStatus(element, correct) {
   clearStatus(element)
   if (correct) {
@@ -92,6 +99,7 @@ function setStatus(element, correct) {
   }
 }
 
+// clear correct/wrong status 
 function clearStatus (element){
   element.classList.remove('correct')
   element.classList.remove('wrong')
@@ -113,6 +121,7 @@ function showQuestion(question) {
   })
 }
 
+// hide next button after reset
 function resetState () {
   clearStatus(document.body)
   nextButton.classList.add('hide')
@@ -122,12 +131,14 @@ function resetState () {
   }
 }
 
+// store highscore and name to browser local storage
 function submit () {
   var name = document.getElementById('name').value
   localStorage.setItem(score, name)
   submitButton.disabled = true
 }
 
+// all of the quiz questions and answers
 var questions = [
   {
     question: 'Commonly used datatypes do NOT include:',
